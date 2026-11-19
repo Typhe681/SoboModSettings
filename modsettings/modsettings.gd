@@ -97,6 +97,7 @@ func add_page(page_name: String, sub: ModsListScreen) -> void:
 	menu.add_child(sub)
 	menu.register_screen("mod_" + page_name.to_snake_case(), sub)
 	sub.hide()
+	sub.side_title_text = "mod settings"
 	add_entry(make_button(page_name, func(): menu.change_screen(sub)))
 
 func refresh_page() -> void:
@@ -274,4 +275,5 @@ static func inject(menu: Menu, mods_screen: MenuScreen) -> void:
 	btn.tooltip_text = "Configure installed mods."
 	parent.add_child(btn)
 	parent.move_child(btn, ref.get_index() + 1)
+	mods_screen.side_title_text = "mod settings"
 	mods_screen.set("is_root", true)
