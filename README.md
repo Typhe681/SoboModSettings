@@ -90,7 +90,7 @@ Every section other than `[meta]` represents a setting.
 | `description` | Tooltip shown when hovering over the setting | No |
 | `value` | Initial setting value | No |
 
-All other properties are optional. Choice settings require a non-empty options array.
+All other properties are optional. `choice` settings require a non-empty `options` array.
 
 For `choice` settings, `value` is the zero-based index of the selected option
 
