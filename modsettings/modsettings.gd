@@ -226,7 +226,7 @@ static func make_choice(text: String, options: Array, index: int, on_change: Cal
 
 static func make_float(text: String, value: float, lo: float, hi: float, step: float, on_change: Callable) -> SoboMenuButtonFloat:
 	var b: SoboMenuButtonFloat = FLOAT_BTN.instantiate()
-	var decimals := 0
+	var decimals := 2
 	while decimals < 6 and step > 0.0 and not is_equal_approx(step * pow(10.0, decimals), roundf(step * pow(10.0, decimals))):
 		decimals += 1
 	b.min_value = lo
