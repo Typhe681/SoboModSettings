@@ -275,5 +275,7 @@ static func inject(menu: Menu, mods_screen: MenuScreen) -> void:
 	btn.tooltip_text = "Configure installed mods."
 	parent.add_child(btn)
 	parent.move_child(btn, ref.get_index() + 1)
+	parent.offset_top += btn.get_combined_minimum_size().y / 2.0
+	parent.offset_bottom += btn.get_combined_minimum_size().y / 2.0
 	mods_screen.side_title_text = "mod settings"
 	mods_screen.set("is_root", true)
