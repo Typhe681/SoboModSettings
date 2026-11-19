@@ -257,25 +257,24 @@ static func make_color(text: String, value: Color, on_change: Callable) -> SoboM
 	return b
 
 static func inject(menu: Menu, mods_screen: MenuScreen) -> void:
-	var ss: MenuScreen = menu.get_settings_screen()
-	var ref: Control = ss.get("input_btn")
-	if ref == null:
-		push_warning("modsettings: no landmark button on %s" % ss.name)
-		return
-	var parent := ref.get_parent()
+	var ss: MenuScreen = menu.settings_screen
+	var parent := ss.get_node("MainControlList")
+
 	if parent.has_node("ModsButton"):
 		return
+
 	mods_screen.parent_screen = ss
 	if mods_screen.get_parent() == null:
 		menu.add_child(mods_screen)
 		menu.register_screen("mods_screen", mods_screen)
 		mods_screen.hide()
+
 	var btn := make_button("mods", func(): menu.change_screen(mods_screen))
 	btn.name = "ModsButton"
 	btn.tooltip_text = "Configure installed mods."
+
 	parent.add_child(btn)
-	parent.move_child(btn, ref.get_index() + 1)
-	parent.offset_top += btn.get_combined_minimum_size().y / 2.0
-	parent.offset_bottom += btn.get_combined_minimum_size().y / 2.0
+	parent.move_child(btn, 0)
+
 	mods_screen.side_title_text = "mod settings"
 	mods_screen.set("is_root", true)
