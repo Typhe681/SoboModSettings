@@ -154,7 +154,9 @@ func _build_page(path: String, cfg: ConfigFile) -> void:
 			continue
 		ctl.tooltip_text = cfg.get_value(section, "description", "")
 		sub.add_entry(ctl)
+
 	add_page(cfg.get_value("meta", "name"), sub)
+	entries.back().tooltip_text = cfg.get_value("meta", "description", "")
 
 static func _make_control(cfg: ConfigFile, section: String, commit: Callable) -> SoboButton:
 	var label: String = cfg.get_value(section, "label", section)
