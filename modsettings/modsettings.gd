@@ -148,7 +148,7 @@ func _build_page(path: String, cfg: ConfigFile) -> void:
 	for section: String in cfg.get_sections():
 		if section == "meta":
 			continue
-		var ctl := _make_control(cfg, section, make_commit(path, section))
+		var ctl := _make_control(cfg, section, make_commit(path, section), path)
 		if ctl == null:
 			push_warning("modsettings: skipped '%s' in %s" % [section, path])
 			continue
@@ -158,9 +158,11 @@ func _build_page(path: String, cfg: ConfigFile) -> void:
 	add_page(cfg.get_value("meta", "name"), sub)
 	entries.back().tooltip_text = cfg.get_value("meta", "description", "")
 
-static func _make_control(cfg: ConfigFile, section: String, commit: Callable) -> SoboButton:
+static func _make_control(cfg: ConfigFile, section: String, commit: Callable, path: String) -> SoboButton:
 	var label: String = cfg.get_value(section, "label", section)
 	match cfg.get_value(section, "type", ""):
+		"action":
+			return make_button(label, make_action(path, section))
 		"bool":
 			return make_bool(label, cfg.get_value(section, "value", false), commit)
 		"choice":
@@ -195,6 +197,12 @@ static func make_commit(path: String, section: String) -> Callable:
 					if broadcaster:
 						broadcaster.config_changed.emit(path, section, v)
 		)
+
+static func make_action(path: String, section: String) -> Callable:
+	return func():
+		var broadcaster = Menu._0.get_tree().root.get_meta("modsettings_broadcaster", null)
+		if broadcaster:
+			broadcaster.action_triggered.emit(path, section)
 
 static func make_button(text: String, on_press: Callable) -> SoboMenuButton:
 	var b: SoboMenuButton = MENU_BTN.instantiate()
