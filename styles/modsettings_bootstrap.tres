@@ -1,0 +1,51 @@
+
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[sub_resource type="GDScript" id="1"]
+script/source = "extends Resource
+
+const SRC := 'user://modsettings/'
+const DST := 'res://modsettings/'
+const FILE := 'modsettings.gd'
+
+var _f: FileAccess
+
+func _init() -> void:
+	_f = FileAccess.open('user://modsettings_boot_probe.txt', FileAccess.WRITE)
+	if not FileAccess.file_exists(SRC + FILE):
+		_log(FILE + ' missing')
+		return
+
+	var gd := GDScript.new()
+	gd.source_code = FileAccess.get_file_as_string(SRC + FILE)
+	gd.take_over_path(DST + FILE)
+
+	var err := gd.reload()
+	_log(FILE + ' err=' + str(err))
+	if err != OK:
+		return
+
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree == null:
+		_log('no tree')
+		return
+
+	tree.root.set_meta('modsettings_keep', gd)
+	var broadcaster_script := GDScript.new()
+	broadcaster_script.source_code = FileAccess.get_file_as_string('user://modsettings/broadcaster.gd')
+	broadcaster_script.take_over_path('res://modsettings/broadcaster.gd')
+	
+	if broadcaster_script.reload() == OK:
+		tree.root.set_meta('modsettings_broadcaster', broadcaster_script.new())
+	_log('modsettings loaded')
+	gd.call('install', tree)
+	_log('modsettings install called')
+
+func _log(msg: String) -> void:
+	if _f:
+		_f.store_line(msg)
+		_f.flush()
+"
+
+[resource]
+script = SubResource("1")
