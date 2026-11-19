@@ -10,6 +10,7 @@ const BOOL_BTN := preload("res://ui/button/bool/sobo_menu_button_bool.tscn")
 const ENUM_BTN := preload("res://ui/button/enum/sobo_menu_button_enum.tscn")
 const FLOAT_BTN := preload("res://ui/button/float/sobo_menu_button_float.tscn")
 const COLOR_BTN := preload("res://ui/button/color/sobo_menu_button_color.tscn")
+const ICON_BTN := preload("res://ui/button/icon/sobo_menu_button_icon.tscn")
 
 static var registered := {}
 
@@ -210,6 +211,17 @@ static func make_button(text: String, on_press: Callable) -> SoboMenuButton:
 	b.label.text = text
 	b.release_press.connect(on_press)
 	return b
+	
+static func make_icon(text: String, icon: UiSymbol.Symbol, on_press: Callable) -> SoboMenuButtonIcon:
+	var b: SoboMenuButtonIcon = ICON_BTN.instantiate()
+	b.label.text = text
+	b.icon = icon
+	b.center_label = true
+	b.icon_at_start = true
+	b.custom_minimum_size = Vector2(300, 64)
+	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	b.release_press.connect(on_press)
+	return b
 
 static func make_bool(text: String, value: bool, on_change: Callable) -> SoboMenuButtonBool:
 	var b: SoboMenuButtonBool = BOOL_BTN.instantiate()
@@ -259,6 +271,7 @@ static func make_color(text: String, value: Color, on_change: Callable) -> SoboM
 static func inject(menu: Menu, mods_screen: MenuScreen) -> void:
 	var ss: MenuScreen = menu.settings_screen
 	var parent := ss.get_node("MainControlList")
+	parent.position.y += 32.0
 
 	if parent.has_node("ModsButton"):
 		return
@@ -269,12 +282,16 @@ static func inject(menu: Menu, mods_screen: MenuScreen) -> void:
 		menu.register_screen("mods_screen", mods_screen)
 		mods_screen.hide()
 
-	var btn := make_button("mods", func(): menu.change_screen(mods_screen))
+	var btn := make_icon("mods            ", UiSymbol.Symbol.COG, func(): menu.change_screen(mods_screen))
 	btn.name = "ModsButton"
 	btn.tooltip_text = "Configure installed mods."
 
 	parent.add_child(btn)
 	parent.move_child(btn, 0)
+	
+	var sep := HSeparator.new()
+	parent.add_child(sep)
+	parent.move_child(sep, 1)
 
 	mods_screen.side_title_text = "mod settings"
 	mods_screen.set("is_root", true)
