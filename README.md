@@ -34,7 +34,7 @@ A config file consists of a [meta] section and one section for each setting.
 [meta]
 
 name="Example Mod"
-description="An example mod with every kind of config button"
+description="Configure Example Mod"
 
 [example_bool]
 
