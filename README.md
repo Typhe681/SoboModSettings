@@ -68,6 +68,11 @@ label="example color"
 description="A tiny color selection ui"
 value=Color(0.346704, 0, 1, 1)
 
+[example_action]
+type="action"
+label="example action"
+description="A button with no value. Broadcasts a signal"
+
 ```
 
 ### Meta section
@@ -118,3 +123,26 @@ The signal is emitted after a successful save.
 - `path`: Path to the config file.
 - `section`: Name of the setting's section.
 - `value`: The new value.
+
+Make sure to check `path` as well as `section`, since another mod could use the same section name.
+
+## Actions
+
+`action` settings are buttons with no value. Nothing is saved to the config file when one is pressed. Instead, the broadcaster emits an `action_triggered` signal so your mod can do something
+
+```gdscript
+func _ready() -> void:
+    var broadcaster = get_tree().root.get_meta("modsettings_broadcaster", null)
+    if broadcaster:
+        broadcaster.action_triggered.connect(_on_action_triggered)
+
+func _on_action_triggered(path: String, section: String) -> void:
+    pass
+```
+
+The signal is emitted as soon as the button is released.
+
+- `path`: Path to the config file.
+- `section`: Name of the action's section.
+
+Make sure to check `path` as well as `section`, since another mod could use the same section name.
