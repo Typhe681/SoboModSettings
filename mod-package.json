@@ -2,9 +2,9 @@
   "format_version": 1,
   "id": "modsettings",
   "name": "SoboModSettings",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "game_versions": [
-    "1.3.11"
+    "1.3.17"
   ],
   "install_layout": "user-data-styles",
   "payload_root": "modsettings",
