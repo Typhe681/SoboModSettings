@@ -60,6 +60,7 @@ min=0.0
 max=100.0
 step=1.0
 value=50.0
+display=true
 
 [example_color]
 
@@ -97,7 +98,9 @@ Every section other than `[meta]` represents a setting.
 
 All other properties are optional. `choice` settings require a non-empty `options` array.
 
-For `choice` settings, `value` is the zero-based index of the selected option
+For `choice` settings, `value` is the zero-based index of the selected option.
+
+For `float` settings, the `display` key decides whether to show the value or not.
 
 ### Saving settings
 
