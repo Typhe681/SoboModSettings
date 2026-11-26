@@ -140,7 +140,8 @@ static func _make_control(cfg: ConfigFile, section: String, commit: Callable, pa
 				float(cfg.get_value(section, "min", 0.0)),
 				float(cfg.get_value(section, "max", 1.0)),
 				float(cfg.get_value(section, "step", 0.0)),
-				commit)
+				commit,
+				bool(cfg.get_value(section, "display", true)))
 		"color":
 			return make_color(label, cfg.get_value(section, "value", Color.WHITE), commit)
 	return null
@@ -207,7 +208,7 @@ static func make_choice(text: String, options: Array, index: int, on_change: Cal
 		on_change.call(state[0]))
 	return b
 
-static func make_float(text: String, value: float, lo: float, hi: float, step: float, on_change: Callable) -> SoboMenuButtonFloat:
+static func make_float(text: String, value: float, lo: float, hi: float, step: float, on_change: Callable, show_value := true) -> SoboMenuButtonFloat:
 	var b: SoboMenuButtonFloat = FLOAT_BTN.instantiate()
 	var decimals := 2
 	while decimals < 6 and step > 0.0 and not is_equal_approx(step * pow(10.0, decimals), roundf(step * pow(10.0, decimals))):
@@ -215,11 +216,11 @@ static func make_float(text: String, value: float, lo: float, hi: float, step: f
 	b.min_value = lo
 	b.max_value = hi
 	b.set_value(value)
-	b.label.text = "%s: %s" % [text, String.num(value, decimals)]
+	b.label.text = ("%s: %s" % [text, String.num(value, decimals)]) if show_value else text
 	b.on_value_changed.connect(func(v: float):
 		if step > 0.0:
 			v = snappedf(v, step)
-		b.label.text = "%s: %s" % [text, String.num(v, decimals)]
+		b.label.text = ("%s: %s" % [text, String.num(v, decimals)]) if show_value else text
 		on_change.call(v))
 	return b
 
