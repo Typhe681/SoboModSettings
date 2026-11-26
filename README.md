@@ -1,7 +1,7 @@
 # SoboModSettings
 A [Sobosuba](https://store.steampowered.com/app/1946560/sobosuba) framework that loads other mods' config files into the in-game settings menu.
 
-Tested on Sobosuba v1.3.11
+Tested on Sobosuba v1.3.17
 
 
 ## Installation:
